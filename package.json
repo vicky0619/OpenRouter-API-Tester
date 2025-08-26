@@ -1,0 +1,33 @@
+{
+  "name": "openrouter-api-tester",
+  "version": "1.0.0",
+  "description": "Professional-grade API testing tool for OpenRouter models with bilingual support",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 3000",
+    "start": "python -m http.server 8000",
+    "build": "echo 'Static site, no build required'"
+  },
+  "keywords": [
+    "openrouter",
+    "api",
+    "tester",
+    "ai",
+    "machine-learning",
+    "gpt",
+    "mistral",
+    "bilingual",
+    "chinese",
+    "english"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": "https://github.com/yourusername/openrouter-api-tester",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/openrouter-api-tester.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/openrouter-api-tester/issues"
+  }
+}

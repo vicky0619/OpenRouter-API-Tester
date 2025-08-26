@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenRouter API Tester - Professional API Testing Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'times': ['Times New Roman', 'serif'],
+                    },
+                    colors: {
+                        nyt: {
+                            black: '#000000',
+                            gray: {
+                                100: '#f8f8f8',
+                                200: '#e8e8e8',
+                                300: '#d0d0d0',
+                                400: '#a0a0a0',
+                                500: '#707070',
+                                600: '#404040',
+                                700: '#2a2a2a',
+                                800: '#1a1a1a',
+                                900: '#0a0a0a'
+                            },
+                            white: '#ffffff'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .nyt-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            box-shadow: 4px 4px 0px #000000;
+        }
+        
+        .nyt-bg {
+            background: #ffffff;
+        }
+        
+        .nyt-header {
+            border-bottom: 3px solid #000000;
+        }
+        
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background: #000000;
+            color: #ffffff;
+            padding: 1.5rem;
+            overflow-x: auto;
+            border: 2px solid #000000;
+        }
+        
+        .tab-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .tab-button:hover::before {
+            left: 100%;
+        }
+        
+        .tab-button.active {
+            background: #000000;
+            color: #ffffff;
+        }
+        
+        .tab-button:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+        
+        .model-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .model-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .model-btn:hover::before {
+            left: 100%;
+        }
+        
+        .model-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .model-btn.active {
+            background: #000000;
+            color: #ffffff;
+            border-color: #000000;
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        }
+        
+        .result-success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border: 1px solid #34d399;
+            color: #065f46;
+        }
+        
+        .result-error {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 1px solid #f87171;
+            color: #991b1b;
+        }
+        
+        .nyt-title {
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .nyt-serif {
+            font-family: 'Times New Roman', serif;
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .glow-effect:hover {
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen nyt-bg">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <header class="text-center mb-12 nyt-header pb-8">
+            <div class="mb-6">
+                <div class="w-16 h-1 bg-black mx-auto mb-4"></div>
+                <h1 class="nyt-title text-5xl text-black mb-4 tracking-wider">
+                    OpenRouter API Tester
+                </h1>
+                <div class="w-32 h-0.5 bg-black mx-auto mb-6"></div>
+                <p class="text-lg text-nyt-gray-600 mb-6 max-w-2xl mx-auto nyt-serif italic">
+                    "A Professional Testing Environment for API Integration"
+                </p>
+                <div class="flex items-center justify-center mb-4">
+                    <button id="lang-toggle" class="text-sm text-black border border-black px-4 py-1 hover:bg-black hover:text-white transition-colors">
+                        <span id="lang-text">中文</span>
+                    </button>
+                </div>
+                <div class="text-sm text-nyt-gray-500 nyt-serif">
+                    <span id="subtitle-en">Professional-grade API testing tool for OpenRouter models</span>
+                    <span id="subtitle-zh" class="hidden">OpenRouter 模型的專業級 API 測試工具</span>
+                </div>
+            </div>
+        </header>
+
+            <div class="nyt-card p-8 mb-12">
+                <div class="flex items-center justify-between mb-8 border-b border-black pb-4">
+                    <h2 class="text-3xl font-bold text-black nyt-title tracking-wider">
+                        <span id="config-title-en">API CONFIGURATION</span>
+                        <span id="config-title-zh" class="hidden">API 配置</span>
+                    </h2>
+                    <div class="text-xs text-black border border-black px-3 py-1 uppercase tracking-wide">
+                        <span id="secure-en">SECURE</span>
+                        <span id="secure-zh" class="hidden">安全</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="api-key" class="block text-sm font-bold text-black mb-3 uppercase tracking-wide nyt-title">
+                                <span id="api-key-label-en">OpenRouter API Key</span>
+                                <span id="api-key-label-zh" class="hidden">OpenRouter API 密鑰</span>
+                            </label>
+                            <div class="relative">
+                                <input type="password" id="api-key" 
+                                       placeholder="sk-or-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" 
+                                       class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:bg-gray-100">
+                                <button id="toggle-visibility" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-black hover:bg-black hover:text-white p-1 transition-colors">
+                                    <i class="fas fa-eye text-sm"></i>
+                                </button>
+                            </div>
+                            <p class="mt-2 text-xs text-nyt-gray-500 nyt-serif">
+                                <span id="api-key-help-en">Don't have an API key? Get one at </span>
+                                <span id="api-key-help-zh" class="hidden">還沒有 API 密鑰？在這裡取得：</span>
+                                <a href="https://openrouter.ai/keys" target="_blank" class="text-black underline hover:bg-black hover:text-white px-1 transition-colors">openrouter.ai/keys</a>
+                            </p>
+                        </div>
+
+                        <div>
+                            <label for="prompt" class="block text-sm font-bold text-black mb-3 uppercase tracking-wide nyt-title">
+                                <span id="prompt-label-en">Test Prompt</span>
+                                <span id="prompt-label-zh" class="hidden">測試提示</span>
+                            </label>
+                            <textarea id="prompt" rows="4" 
+                                      class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:bg-gray-100 resize-none nyt-serif"
+                                      placeholder="Enter your test prompt here...">Tell me a short joke about AI</textarea>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-bold text-black mb-3 uppercase tracking-wide nyt-title">
+                                <span id="model-label-en">AI Model Selection</span>
+                                <span id="model-label-zh" class="hidden">AI 模型選擇</span>
+                            </label>
+                            <div class="grid grid-cols-1 gap-3 mb-4">
+                                <button data-model="openai/gpt-oss-20b:free" 
+                                        class="model-btn py-4 px-6 border-2 border-black hover:bg-black hover:text-white focus:outline-none text-left transition-all w-full">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-current nyt-title">GPT OSS 20B</div>
+                                            <div class="text-sm text-current nyt-serif">
+                                                <span id="free-fast-en">Free model • Fast response</span>
+                                                <span id="free-fast-zh" class="hidden">免費模型 • 快速回應</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl">□</div>
+                                    </div>
+                                </button>
+                                <button data-model="mistralai/mistral-7b-instruct:free" 
+                                        class="model-btn py-4 px-6 border-2 border-black hover:bg-black hover:text-white focus:outline-none text-left transition-all w-full">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-current nyt-title">Mistral 7B Instruct</div>
+                                            <div class="text-sm text-current nyt-serif">
+                                                <span id="free-instruct-en">Free model • Instruction following</span>
+                                                <span id="free-instruct-zh" class="hidden">免費模型 • 指令跟隨</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl">□</div>
+                                    </div>
+                                </button>
+                            </div>
+                            <div class="relative">
+                                <input type="text" id="custom-model" 
+                                       placeholder="Or enter custom model name..." 
+                                       class="w-full px-4 py-3 border-2 border-black focus:outline-none focus:bg-gray-100 nyt-serif">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t-2 border-black">
+                    <button id="test-btn" class="w-full bg-black text-white font-bold py-4 px-8 hover:bg-white hover:text-black border-2 border-black transition-all flex items-center justify-center text-lg nyt-title tracking-wider">
+                        <span id="btn-text">
+                            <span id="test-btn-en">TEST API KEY</span>
+                            <span id="test-btn-zh" class="hidden">測試 API 密鑰</span>
+                        </span>
+                        <div id="loading-spinner" class="loading-spinner ml-3 hidden"></div>
+                    </button>
+                </div>
+
+                <div id="result-container" class="mt-8 hidden">
+                    <div class="border-b-2 border-black mb-4 pb-2">
+                        <h3 class="text-xl font-bold text-black nyt-title tracking-wider">
+                            <span id="result-title-en">TEST RESULTS</span>
+                            <span id="result-title-zh" class="hidden">測試結果</span>
+                        </h3>
+                    </div>
+                    <div id="result" class="p-6 border-2 border-black text-black break-words whitespace-pre-wrap nyt-serif text-sm leading-relaxed"></div>
+                </div>
+            </div>
+
+            <div class="nyt-card p-8 mb-12">
+                <div class="border-b-2 border-black mb-8 pb-4">
+                    <h2 class="text-3xl font-bold text-black nyt-title tracking-wider mb-2">
+                        <span id="integration-title-en">INTEGRATION EXAMPLES</span>
+                        <span id="integration-title-zh" class="hidden">整合範例</span>
+                    </h2>
+                    <p class="text-black nyt-serif italic">
+                        <span id="integration-desc-en">Copy-paste ready code for your projects</span>
+                        <span id="integration-desc-zh" class="hidden">為您的專案準備的可複製程式碼</span>
+                    </p>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="flex flex-wrap gap-1">
+                        <button class="tab-button py-3 px-6 border-2 border-black active font-bold transition-all nyt-title text-xs" data-tab="python-openai">
+                            PYTHON (OPENAI)
+                        </button>
+                        <button class="tab-button py-3 px-6 border-2 border-black font-bold transition-all nyt-title text-xs" data-tab="python-requests">
+                            PYTHON (REQUESTS)
+                        </button>
+                        <button class="tab-button py-3 px-6 border-2 border-black font-bold transition-all nyt-title text-xs" data-tab="javascript-fetch">
+                            JAVASCRIPT
+                        </button>
+                        <button class="tab-button py-3 px-6 border-2 border-black font-bold transition-all nyt-title text-xs" data-tab="curl">
+                            CURL
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div id="python-openai" class="tab-content">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <i class="fab fa-python"></i>
+                                <span>Python with OpenAI SDK</span>
+                            </div>
+                            <button class="copy-btn text-gray-400 hover:text-white transition-colors" data-target="python-openai-code">
+                                <i class="fas fa-copy mr-2"></i>Copy
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="python-openai-code">...</code></pre>
+                    </div>
+                    
+                    <div id="python-requests" class="tab-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <i class="fas fa-globe"></i>
+                                <span>Python with Requests</span>
+                            </div>
+                            <button class="copy-btn text-gray-400 hover:text-white transition-colors" data-target="python-requests-code">
+                                <i class="fas fa-copy mr-2"></i>Copy
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="python-requests-code">...</code></pre>
+                    </div>
+
+                    <div id="javascript-fetch" class="tab-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <i class="fab fa-js"></i>
+                                <span>JavaScript with Fetch</span>
+                            </div>
+                            <button class="copy-btn text-gray-400 hover:text-white transition-colors" data-target="javascript-code">
+                                <i class="fas fa-copy mr-2"></i>Copy
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="javascript-code">...</code></pre>
+                    </div>
+
+                    <div id="curl" class="tab-content hidden">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2 text-sm text-gray-400">
+                                <i class="fas fa-terminal"></i>
+                                <span>cURL Command</span>
+                            </div>
+                            <button class="copy-btn text-gray-400 hover:text-white transition-colors" data-target="curl-code">
+                                <i class="fas fa-copy mr-2"></i>Copy
+                            </button>
+                        </div>
+                        <pre class="code-block"><code id="curl-code">...</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="text-center text-black text-sm mb-8">
+                <div class="nyt-card p-6 max-w-md mx-auto">
+                    <div class="w-8 h-0.5 bg-black mx-auto mb-4"></div>
+                    <p class="text-black text-xs nyt-serif">
+                        <span id="thank-you-en">Thank you for using our API tester!</span>
+                        <span id="thank-you-zh" class="hidden">感謝您使用我們的 API 測試工具！</span>
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const apiKeyInput = document.getElementById('api-key');
+            const toggleVisibilityBtn = document.getElementById('toggle-visibility');
+            const modelButtons = document.querySelectorAll('.model-btn');
+            const customModelInput = document.getElementById('custom-model');
+            const promptInput = document.getElementById('prompt');
+            const testBtn = document.getElementById('test-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultDiv = document.getElementById('result');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const btnText = document.getElementById('btn-text');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const langToggle = document.getElementById('lang-toggle');
+            
+            let selectedModel = '';
+            let currentLang = 'en';
+
+            // Language switching functionality
+            function switchLanguage() {
+                currentLang = currentLang === 'en' ? 'zh' : 'en';
+                
+                // Toggle all bilingual elements
+                const enElements = document.querySelectorAll('[id$="-en"]');
+                const zhElements = document.querySelectorAll('[id$="-zh"]');
+                
+                enElements.forEach(el => el.classList.toggle('hidden', currentLang !== 'en'));
+                zhElements.forEach(el => el.classList.toggle('hidden', currentLang !== 'zh'));
+                
+                // Update language toggle button
+                document.getElementById('lang-text').textContent = currentLang === 'en' ? '中文' : 'English';
+                
+                // Update prompt placeholder and content
+                if (currentLang === 'zh') {
+                    promptInput.placeholder = '在此輸入您的測試提示...';
+                    if (promptInput.value === 'Tell me a short joke about AI') {
+                        promptInput.value = '請告訴我一個關於AI的笑話';
+                    }
+                    apiKeyInput.placeholder = 'sk-or-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+                    customModelInput.placeholder = '或輸入自訂模型名稱...';
+                } else {
+                    promptInput.placeholder = 'Enter your test prompt here...';
+                    if (promptInput.value === '請告訴我一個關於AI的笑話') {
+                        promptInput.value = 'Tell me a short joke about AI';
+                    }
+                    apiKeyInput.placeholder = 'sk-or-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+                    customModelInput.placeholder = 'Or enter custom model name...';
+                }
+                
+                // Track language change
+                trackEvent('language_change', { 
+                    from: currentLang === 'en' ? 'zh' : 'en',
+                    to: currentLang 
+                });
+                
+                // Update code snippets
+                updateCodeSnippets();
+            }
+            
+            langToggle.addEventListener('click', switchLanguage);
+
+            // 1. Analytics (Backend tracking - not visible to users)
+            // Send page view to backend analytics
+            async function trackEvent(event, data = {}) {
+                try {
+                    await fetch('/api/analytics', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ event, data })
+                    });
+                } catch (error) {
+                    // Silently fail - don't affect user experience
+                    console.debug('Analytics tracking failed:', error);
+                }
+            }
+            
+            // Track page view
+            trackEvent('page_view', { 
+                language: currentLang,
+                timestamp: new Date().toISOString()
+            });
+
+            // 2. API Key Visibility
+            toggleVisibilityBtn.addEventListener('click', function() {
+                const isPassword = apiKeyInput.type === 'password';
+                apiKeyInput.type = isPassword ? 'text' : 'password';
+                toggleVisibilityBtn.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+            });
+
+            // 3. Tab Switching
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(button.dataset.tab).classList.remove('hidden');
+                });
+            });
+            
+            // 3a. Copy Button Functionality
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const codeElement = document.getElementById(targetId);
+                    
+                    try {
+                        await navigator.clipboard.writeText(codeElement.textContent);
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                        setTimeout(() => {
+                            btn.innerHTML = originalText;
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                });
+            });
+
+            // 4. Model Selection Logic
+            function updateModelSelection(clickedButton) {
+                modelButtons.forEach(btn => btn.classList.remove('active'));
+                if (clickedButton) {
+                    clickedButton.classList.add('active');
+                    selectedModel = clickedButton.dataset.model;
+                    customModelInput.value = ''; // Clear custom input when a button is clicked
+                } else {
+                    selectedModel = ''; // No button selected
+                }
+                updateCodeSnippets();
+            }
+
+            modelButtons.forEach(button => {
+                button.addEventListener('click', () => updateModelSelection(button));
+            });
+
+            customModelInput.addEventListener('input', () => {
+                const customValue = customModelInput.value.trim();
+                if (customValue !== '') {
+                    modelButtons.forEach(btn => btn.classList.remove('active'));
+                    selectedModel = ''; // Clear selected model to prioritize custom input
+                    // Visual feedback for custom input
+                    customModelInput.style.borderColor = '#000000';
+                    customModelInput.style.backgroundColor = '#f3f4f6';
+                } else {
+                    // Reset styling when empty
+                    customModelInput.style.borderColor = '#000000';
+                    customModelInput.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                }
+                updateCodeSnippets();
+            });
+
+            // Select first model by default
+            if (modelButtons.length > 0) {
+                modelButtons[0].click();
+            }
+
+            // 5. Update Code Snippets Dynamically
+            function updateCodeSnippets() {
+                const apiKey = apiKeyInput.value.trim() || '<OPENROUTER_API_KEY>';
+                // Prioritize custom model input over selected model
+                const customModel = customModelInput.value.trim();
+                const model = customModel || selectedModel || '<MODEL_NAME>';
+                const prompt = promptInput.value.trim() || '<YOUR_PROMPT>';
+                
+                // Model selection priority: custom input > selected button > placeholder
+
+                const openaiCode = `from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key="${apiKey}",
+)
+
+completion = client.chat.completions.create(
+    extra_headers={
+        "HTTP-Referer": "<YOUR_SITE_URL>", # Optional
+        "X-Title": "<YOUR_SITE_NAME>", # Optional
+    },
+    model="${model}",
+    messages=[
+        {
+            "role": "user",
+            "content": "${prompt.replace(/"/g, '\\"')}"
+        }
+    ]
+)
+
+print(completion.choices[0].message.content)`;
+
+                const requestsCode = `import requests
+import json
+
+response = requests.post(
+    url="https://openrouter.ai/api/v1/chat/completions",
+    headers={
+        "Authorization": "Bearer ${apiKey}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "<YOUR_SITE_URL>", # Optional
+        "X-Title": "<YOUR_SITE_NAME>", # Optional
+    },
+    data=json.dumps({
+        "model": "${model}",
+        "messages": [
+            {
+                "role": "user",
+                "content": "${prompt.replace(/"/g, '\\"')}"
+            }
+        ]
+    })
+)
+
+print(response.json()['choices'][0].message.content)`;
+
+                const javascriptCode = `const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+        'Authorization': 'Bearer ${apiKey}',
+        'Content-Type': 'application/json',
+        'HTTP-Referer': window.location.href,
+        'X-Title': 'OpenRouter API Tester'
+    },
+    body: JSON.stringify({
+        model: '${model}',
+        messages: [
+            {
+                role: 'user',
+                content: '${prompt.replace(/"/g, '\\"')}'
+            }
+        ]
+    })
+});
+
+const data = await response.json();
+console.log(data.choices[0].message.content);`;
+
+                const curlCode = `curl -X POST "https://openrouter.ai/api/v1/chat/completions" \\
+    -H "Authorization: Bearer ${apiKey}" \\
+    -H "Content-Type: application/json" \\
+    -H "HTTP-Referer: <YOUR_SITE_URL>" \\
+    -H "X-Title: <YOUR_SITE_NAME>" \\
+    -d '{
+        "model": "${model}",
+        "messages": [
+            {
+                "role": "user",
+                "content": "${prompt.replace(/"/g, '\\"')}"
+            }
+        ]
+    }'`;
+                
+                document.querySelector('#python-openai-code').textContent = openaiCode;
+                document.querySelector('#python-requests-code').textContent = requestsCode;
+                document.querySelector('#javascript-code').textContent = javascriptCode;
+                document.querySelector('#curl-code').textContent = curlCode;
+            }
+            
+            [apiKeyInput, promptInput].forEach(el => el.addEventListener('input', updateCodeSnippets));
+            updateCodeSnippets(); // Initial call
+
+            // 6. API Test Logic
+            testBtn.addEventListener('click', async function() {
+                const apiKey = apiKeyInput.value.trim();
+                const modelToTest = customModelInput.value.trim() || selectedModel;
+                const prompt = promptInput.value.trim();
+                
+                if (!apiKey) { return showResult(getErrorMessage('noApiKey'), 'error'); }
+                if (!modelToTest) { return showResult(getErrorMessage('noModel'), 'error'); }
+                if (!prompt) { return showResult(getErrorMessage('noPrompt'), 'error'); }
+                
+                setLoadingState(true);
+                
+                try {
+                    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`,
+                            'Content-Type': 'application/json',
+                            'HTTP-Referer': window.location.href,
+                            'X-Title': 'OpenRouter API Tester'
+                        },
+                        body: JSON.stringify({ model: modelToTest, messages: [{ role: 'user', content: prompt }] })
+                    });
+                    
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error?.message || `API returned status ${response.status}`);
+                    }
+                    
+                    showResult(data.choices[0].message.content, 'success');
+                    
+                    // Track successful API test
+                    trackEvent('api_test_success', {
+                        model: modelToTest,
+                        language: currentLang,
+                        prompt_length: prompt.length
+                    });
+
+                } catch (error) {
+                    showResult(`Error: ${error.message}`, 'error');
+                    
+                    // Track API test error
+                    trackEvent('api_test_error', {
+                        model: modelToTest,
+                        error: error.message,
+                        language: currentLang
+                    });
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+
+            function showResult(message, type) {
+                resultDiv.textContent = message;
+                resultDiv.className = `p-6 border-2 border-black text-black break-words whitespace-pre-wrap nyt-serif text-sm leading-relaxed ${
+                    type === 'error' ? 'bg-gray-100' : 'bg-white'
+                }`;
+                resultContainer.classList.remove('hidden');
+            }
+
+            function setLoadingState(isLoading) {
+                testBtn.disabled = isLoading;
+                const enText = isLoading ? 'TESTING...' : 'TEST API KEY';
+                const zhText = isLoading ? '測試中...' : '測試 API 密鑰';
+                btnText.innerHTML = `
+                    <span id="test-btn-en" class="${currentLang !== 'en' ? 'hidden' : ''}">${enText}</span>
+                    <span id="test-btn-zh" class="${currentLang !== 'zh' ? 'hidden' : ''}">${zhText}</span>
+                `;
+                loadingSpinner.classList.toggle('hidden', !isLoading);
+            }
+            
+            // Error messages in both languages
+            const errorMessages = {
+                noApiKey: {
+                    en: 'Please enter your OpenRouter API key.',
+                    zh: '請輸入您的 OpenRouter API 密鑰。'
+                },
+                noModel: {
+                    en: 'Please select or enter a model to test.',
+                    zh: '請選擇或輸入要測試的模型。'
+                },
+                noPrompt: {
+                    en: 'Please enter a test prompt.',
+                    zh: '請輸入測試提示。'
+                }
+            };
+            
+            function getErrorMessage(key) {
+                return errorMessages[key][currentLang];
+            }
+        });
+    </script>
+</body>
+</html>
