@@ -1,6 +1,6 @@
 # OpenRouter API Tester | OpenRouter API 測試工具
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/openrouter-api-tester?style=social)](https://github.com/yourusername/openrouter-api-tester)
+[![GitHub stars](https://img.shields.io/github/stars/vicky0619/OpenRouter-API-Tester?style=social)](https://github.com/vicky0619/OpenRouter-API-Tester)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > ⭐ **如果這個工具對您有幫助，請給個星星支持一下！ | If this tool helps you, please give it a star!** ⭐
