@@ -7,6 +7,8 @@
 
 [🔗 **Live Demo**](https://open-router-api-tester.vercel.app/) | [English](#english) | [中文](#chinese)
 
+![openrouter-api-tester.gif](https://github.com/vicky0619/OpenRouter-API-Tester/blob/main/openrouter-api-tester.gif)
+
 ---
 
 ## English
