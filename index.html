@@ -9,6 +9,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -530,10 +536,18 @@
             
             langToggle.addEventListener('click', switchLanguage);
 
-            // 1. Analytics (Backend tracking - not visible to users)
+            // 1. Analytics (Backend tracking and Vercel Analytics)
+            // Vercel Analytics custom events
+            function trackVercelEvent(eventName, properties = {}) {
+                if (typeof va !== 'undefined') {
+                    va('track', eventName, properties);
+                }
+            }
+            
             // Send page view to backend analytics
             async function trackEvent(event, data = {}) {
                 try {
+                    // Track to custom backend
                     await fetch('/api/analytics', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -543,12 +557,17 @@
                     // Silently fail - don't affect user experience
                     console.debug('Analytics tracking failed:', error);
                 }
+                
+                // Also track to Vercel Analytics
+                trackVercelEvent(event, data);
             }
             
             // Track page view
             trackEvent('page_view', { 
                 language: currentLang,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                screen: `${screen.width}x${screen.height}`
             });
 
             // 2. API Key Visibility

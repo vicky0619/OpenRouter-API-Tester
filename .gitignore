@@ -1,3 +1,9 @@
+# Dependencies
+node_modules/
+*.tgz
+*.tar.gz
+package-lock.json
+
 # Mac
 .DS_Store
 .DS_Store?
@@ -20,7 +26,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Vercel
+.vercel
+
 # Private notes
 notes.txt
 TODO.txt
 DEPLOYMENT.md
+
+# Media files (can be re-generated)
+*.gif
+*.mp4
+*.mov

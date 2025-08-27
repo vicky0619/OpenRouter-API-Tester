@@ -29,5 +29,8 @@
   },
   "bugs": {
     "url": "https://github.com/yourusername/openrouter-api-tester/issues"
+  },
+  "devDependencies": {
+    "@vercel/analytics": "^1.5.0"
   }
 }
