@@ -1,11 +1,13 @@
 # OpenRouter API Tester | OpenRouter API 測試工具
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/openrouter-api-tester?style=social)](https://github.com/yourusername/openrouter-api-tester)
+[![GitHub stars](https://img.shields.io/github/stars/vicky0619/OpenRouter-API-Tester?style=social)](https://github.com/vicky0619/OpenRouter-API-Tester)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > ⭐ **如果這個工具對您有幫助，請給個星星支持一下！ | If this tool helps you, please give it a star!** ⭐
 
-[🔗 **Live Demo**](https://your-deployed-site.vercel.app) | [English](#english) | [中文](#chinese)
+[🔗 **Live Demo**](https://open-router-api-tester.vercel.app/) | [English](#english) | [中文](#chinese)
+
+![openrouter-api-tester.gif](https://github.com/vicky0619/OpenRouter-API-Tester/blob/main/openrouter-api-tester.gif)
 
 ---
 
@@ -82,7 +84,7 @@ The tool provides ready-to-copy code examples in:
 
 We welcome contributions! Here are some ways to contribute:
 
-- 🐛 Report bugs by opening an [issue](https://github.com/yourusername/openrouter-api-tester/issues)
+- 🐛 Report bugs by opening an [issue](https://github.com/vicky0619/OpenRouter-API-Tester/issues)
 - 💡 Suggest new features or improvements  
 - 🌍 Help translate to more languages
 - 📝 Improve documentation
@@ -103,12 +105,8 @@ MIT License - feel free to use this in your own projects.
 
 ### 📞 Contact
 
-- 📧 Email: your-email@example.com
-- 🐦 Twitter: [@yourusername](https://twitter.com/yourusername)
-- 💼 LinkedIn: [Your Name](https://linkedin.com/in/yourname)
+- 📧 Email: vicky46586038@gmail.com
 
----
-*Made with ❤️ for the OpenRouter community*
 
 ---
 
@@ -146,7 +144,7 @@ MIT License - feel free to use this in your own projects.
 ### 🚀 快速開始（超簡單！）
 
 **選項 1: 線上使用**
-- 直接訪問 [線上演示](https://your-deployed-site.vercel.app) 立即開始測試！
+- 直接訪問 [線上演示](https://open-router-api-tester.vercel.app/) 立即開始測試！
 
 **選項 2: 下載離線使用**
 1. **下載**：點擊綠色的 "Code" 按鈕 → "Download ZIP"
@@ -185,7 +183,7 @@ MIT License - feel free to use this in your own projects.
 
 我們歡迎各種形式的貢獻！以下是一些參與方式：
 
-- 🐛 通過開啟 [issue](https://github.com/yourusername/openrouter-api-tester/issues) 報告錯誤
+- 🐛 通過開啟 [issue](https://github.com/vicky0619/OpenRouter-API-Tester/issues) 報告錯誤
 - 💡 建議新功能或改進
 - 🌍 幫助翻譯到更多語言
 - 📝 改善文檔
@@ -206,9 +204,5 @@ MIT 授權 - 歡迎在您自己的專案中使用。
 
 ### 📞 聯絡方式
 
-- 📧 Email: your-email@example.com
-- 🐦 Twitter: [@yourusername](https://twitter.com/yourusername)
-- 💼 LinkedIn: [Your Name](https://linkedin.com/in/yourname)
+- 📧 Email: vicky46586038@gmail.com
 
----
-*用 ❤️ 為 OpenRouter 社群製作*
